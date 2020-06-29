@@ -2,15 +2,18 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Exception = System.Exception;
+
 using java.io;
 using org.apache.tika.io;
 using org.apache.tika.metadata;
+
 using TikaOnDotNet.TextExtraction.Stream;
-using Exception = System.Exception;
+using OLAF;
 
 namespace TikaOnDotNet.TextExtraction
 {
-    public class TextExtractor : ITextExtractor
+    public class TextExtractor : Runtime, ITextExtractor
     {
         public TextExtractionResult Extract(string filePath)
         {

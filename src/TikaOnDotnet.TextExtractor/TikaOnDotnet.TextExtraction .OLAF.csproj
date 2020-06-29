@@ -130,6 +130,7 @@
     <Compile Include="..\..\SolutionInfo.cs">
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
+    <Compile Include="Runtime.cs" />
     <Compile Include="Stream\DotNetOutputStreamAdapter.cs" />
     <Compile Include="Stream\ExtractionResult.cs" />
     <Compile Include="Stream\StreamContentHandler.cs" />
@@ -144,6 +145,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\OLAF.Base\OLAF.Base.csproj">
+      <Project>{8d448b26-d206-48c8-b17f-a31133c25665}</Project>
+      <Name>OLAF.Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tika-config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

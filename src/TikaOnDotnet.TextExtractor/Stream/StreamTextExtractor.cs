@@ -1,21 +1,38 @@
 using System;
+using SysIO = System.IO;
+
 using java.io;
 using javax.xml.transform;
 using javax.xml.transform.sax;
 using javax.xml.transform.stream;
+using org.apache.tika.config;
+using org.apache.tika.detect;
 using org.apache.tika.metadata;
 using org.apache.tika.parser;
 using Parser = org.apache.tika.parser.Parser;
 
+using OLAF;
+
 namespace TikaOnDotNet.TextExtraction.Stream
 {
-    public class StreamTextExtractor
+    public class StreamTextExtractor : Runtime
     {
         public Metadata Extract(Func<Metadata, InputStream> streamFactory, System.IO.Stream outputStream)
         {
             try
             {
-                var parser = new AutoDetectParser();
+                AutoDetectParser parser = null;
+                if (SysIO.File.Exists("tika-config.xml"))
+                {
+                    TikaConfig config = new TikaConfig("tika-config.xml");
+                    Detector detector = config.getDetector();
+                    parser = new AutoDetectParser(config);
+                    Debug("Using Tika configuration file {0}.", "tika-config.xml");
+                }
+                else
+                {
+                    parser = new AutoDetectParser();
+                }
                 var metadata = new Metadata();
                 var parseContext = new ParseContext();
                 var handler = GetTransformerHandler(outputStream);
