@@ -17,34 +17,31 @@ namespace TikaOnDotNet.TextExtraction.Stream
 {
     public class StreamTextExtractor : Runtime
     {
+        public StreamTextExtractor()
+        {
+            Config = TikaConfig.getDefaultConfig();
+            Parser = new AutoDetectParser();
+        }
+
+        public AutoDetectParser Parser { get; protected set; }
+
+        public TikaConfig Config { get; protected set; }
         public Metadata Extract(Func<Metadata, InputStream> streamFactory, System.IO.Stream outputStream)
         {
             try
             {
-                AutoDetectParser parser = null;
-                if (SysIO.File.Exists("tika-config.xml"))
-                {
-                    TikaConfig config = new TikaConfig("tika-config.xml");
-                    Detector detector = config.getDetector();
-                    parser = new AutoDetectParser(config);
-                    Debug("Using Tika configuration file {0}.", "tika-config.xml");
-                }
-                else
-                {
-                    parser = new AutoDetectParser();
-                }
                 var metadata = new Metadata();
                 var parseContext = new ParseContext();
                 var handler = GetTransformerHandler(outputStream);
 
                 //use the base class type for the key or parts of Tika won't find a usable parser
-                parseContext.set(typeof(Parser), parser);
+                parseContext.set(typeof(Parser), Parser);
 
                 using (var inputStream = streamFactory(metadata))
                 {
                     try
                     {
-                        parser.parse(inputStream, handler, metadata, parseContext);
+                        Parser.parse(inputStream, handler, metadata, parseContext);
                     }
                     finally
                     {
